@@ -1,40 +1,41 @@
 # ── M.A.X — Secrets & generated files (NEVER commit these) ───────────────────
 
-# ── Config with real API keys ─────────────────────────────────────────────────
-config.json          # Contains Groq, NewsAPI, Weather, email, Spotify keys
+# Config with real API keys — use config.example.json as the template
+config.json
 
-# ── Runtime / generated data ──────────────────────────────────────────────────
-memory.json          # Conversation history — personal data
-data.json            # Local app data
-data.txt             # Scratch data file
+# Runtime / generated data — personal conversation history and app data
+memory.json
+data.json
+data.txt
 
-# ── Credentials / tokens ──────────────────────────────────────────────────────
+# Credentials / tokens
 .spotify_cache
 *.token
 *.credentials
 .env
 secrets.json
 
-# ── Logs & screenshots ────────────────────────────────────────────────────────
+# Logs & screenshots
 logs/
 screenshots/
 
-# ── Python cache ──────────────────────────────────────────────────────────────
+# Python cache
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
 
-# ── Wheel files bundled locally ───────────────────────────────────────────────
+# Wheel files bundled locally
 *.whl
 
-# ── Local images that aren't part of the UI ───────────────────────────────────
+# Local images that aren't part of the distributed UI
 ImgContor.jpg
 canny.jpg
 jarv.png
 jarvis.jpg
 jarvis1.jpg
 images/
+
 
 # ── Original gitignore ────────────────────────────────────────────────────────
 # Byte-compiled / optimized / DLL files
