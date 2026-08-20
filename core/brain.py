@@ -15,7 +15,7 @@ with open(_cfg_path, "r") as f:
     _cfg = json.load(f)
 
 _GROQ_KEY    = _cfg["groq"]["api_key"]
-_MODEL       = _cfg["groq"].get("model", "llama-3.3-70b-versatile")
+_MODEL       = _cfg["groq"].get("model", "groq/compound")
 _USER_NAME   = _cfg["user"]["name"]
 _MAX_HISTORY = _cfg["memory"]["max_history"]
 
