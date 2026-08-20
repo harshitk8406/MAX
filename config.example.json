@@ -1,0 +1,45 @@
+{
+  "user": {
+    "name": "Your Name",
+    "assistant_name": "MAX"
+  },
+  "groq": {
+    "api_key": "YOUR_GROQ_API_KEY_HERE",
+    "model": "llama-3.3-70b-versatile"
+  },
+  "news": {
+    "api_key": "YOUR_NEWSAPI_KEY_HERE",
+    "source": "the-times-of-india"
+  },
+  "weather": {
+    "api_key": "YOUR_OPENWEATHERMAP_KEY_HERE"
+  },
+  "email": {
+    "address": "your_email@gmail.com",
+    "password": "your_app_password_here",
+    "default_recipient": "recipient@example.com"
+  },
+  "spotify": {
+    "client_id": "YOUR_SPOTIFY_CLIENT_ID",
+    "client_secret": "YOUR_SPOTIFY_CLIENT_SECRET",
+    "redirect_uri": "http://localhost:8888/callback"
+  },
+  "voice": {
+    "gender": "male",
+    "rate": 175,
+    "volume": 1.0
+  },
+  "music": {
+    "folder": "C:/Users/YourName/Music"
+  },
+  "chrome_path": "C:/Program Files/Google/Chrome/Application/chrome.exe",
+  "api": {
+    "enabled": true,
+    "host": "127.0.0.1",
+    "port": 8000
+  },
+  "memory": {
+    "max_history": 20
+  },
+  "wake_word": "hey max"
+}

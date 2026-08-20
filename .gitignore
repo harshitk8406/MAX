@@ -1,3 +1,42 @@
+# ── M.A.X — Secrets & generated files (NEVER commit these) ───────────────────
+
+# ── Config with real API keys ─────────────────────────────────────────────────
+config.json          # Contains Groq, NewsAPI, Weather, email, Spotify keys
+
+# ── Runtime / generated data ──────────────────────────────────────────────────
+memory.json          # Conversation history — personal data
+data.json            # Local app data
+data.txt             # Scratch data file
+
+# ── Credentials / tokens ──────────────────────────────────────────────────────
+.spotify_cache
+*.token
+*.credentials
+.env
+secrets.json
+
+# ── Logs & screenshots ────────────────────────────────────────────────────────
+logs/
+screenshots/
+
+# ── Python cache ──────────────────────────────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# ── Wheel files bundled locally ───────────────────────────────────────────────
+*.whl
+
+# ── Local images that aren't part of the UI ───────────────────────────────────
+ImgContor.jpg
+canny.jpg
+jarv.png
+jarvis.jpg
+jarvis1.jpg
+images/
+
+# ── Original gitignore ────────────────────────────────────────────────────────
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
