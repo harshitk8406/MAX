@@ -41,5 +41,5 @@
   "memory": {
     "max_history": 20
   },
-  "wake_word": "hey max"
+  "wake_word": "max"
 }

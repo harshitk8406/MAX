@@ -23,7 +23,7 @@ with open(_cfg_path, "r") as f:
     _cfg = json.load(f)
 
 _VOICE_CFG = _cfg.get("voice", {})
-_WAKE_WORD  = _cfg.get("wake_word", "hey max").lower()
+_WAKE_WORD  = _cfg.get("wake_word", "max").lower()
 
 # ── TTS Engine ────────────────────────────────────────────────────────────────
 # Primary:  Microsoft Edge Neural TTS (edge-tts) — real human-quality voices
@@ -331,7 +331,9 @@ def _wake_loop(on_wake_callback):
                 audio = recognizer.listen(source, timeout=3, phrase_time_limit=5)
             text = recognizer.recognize_google(audio, language='en-in').lower()
             log.debug(f"Wake listener heard: {text}")
-            if _WAKE_WORD in text:
+            # Use word-boundary check so "max" in e.g. "maximize" doesn't trigger
+            words = text.split()
+            if _WAKE_WORD in words or _WAKE_WORD in text:
                 log.info("Wake word detected!")
                 on_wake_callback()
         except (sr.WaitTimeoutError, sr.UnknownValueError):

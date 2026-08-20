@@ -91,7 +91,7 @@ def process_query(query: str, speak_response: bool = True) -> dict:
         return {"skill": "get_reminders", "args": {}, "speak": response}
 
     # Wake-word echo
-    if low in ("hey max", "max"):
+    if low in ("max",):
         response = "Hey! What's up?"
         _deliver(response)
         return {"skill": "wake", "args": {}, "speak": response}
@@ -199,7 +199,7 @@ def _on_wake():
 
         # ── "Go to sleep / Stand by" → end session, keep app open ───────────
         if any(p in low for p in _SLEEP_PHRASES):
-            _deliver("Going on standby. Say 'Hey Max' when you need me.")
+            _deliver("Going on standby. Say 'Max' when you need me.")
             if gui:
                 gui.set_state("idle")
             break           # Exit loop → restart wake listener below
