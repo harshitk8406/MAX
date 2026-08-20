@@ -209,21 +209,40 @@ _tts_thread.start()
 
 
 
+def _tts_truncate(text: str, max_sentences: int = 3, max_chars: int = 400) -> str:
+    """
+    For voice output, read only the first few sentences of a long response.
+    The full text is already displayed in the GUI.
+    """
+    if len(text) <= max_chars:
+        return text
+    # Split on sentence-ending punctuation
+    import re
+    sentences = re.split(r'(?<=[.!?])\s+', text.strip())
+    truncated = ' '.join(sentences[:max_sentences])
+    if len(sentences) > max_sentences:
+        truncated += ' ... You can read the full response in the chat.'
+    return truncated
+
+
 def speak(text: str) -> None:
     """
     Thread-safe TTS. Can be called from any thread.
     Blocks until the utterance is fully spoken.
+    The GUI shows the full text; TTS reads a truncated version for long responses.
     """
     if not text:
         return
     log.info(f"[MAX speaks] {text[:80]}")
     if _on_speak_start:
         _on_speak_start(text)
+    tts_text = _tts_truncate(text)
     done = threading.Event()
-    _tts_queue.put((text, done))
+    _tts_queue.put((tts_text, done))
     done.wait()                   # Block caller until speech finishes
     if _on_speak_end:
         _on_speak_end()
+
 
 
 def set_voice(gender: str) -> None:

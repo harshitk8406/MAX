@@ -98,13 +98,14 @@ Always respond with a single JSON object. Choose the right format:
 - minimize_all: {{}}
 
 ## RULES:
-1. Keep "speak" under 3 sentences — this is voice output, not text.
-2. Never use markdown, bullet points, or asterisks in "speak".
-3. Be warm and personal — you know {_USER_NAME} well.
-4. If the user wants you to DO something (open, play, search, send, create), pick a skill.
-5. If it's a factual question you can answer, use general_chat.
-6. For ambiguous requests, pick the most likely skill and proceed confidently.
-7. Never output anything outside the JSON object."""
+1. For skill actions (open, play, search, send, etc.) keep "speak" to 1-2 sentences — it's a spoken confirmation.
+2. For general_chat (questions, explanations, plans, advice) write a COMPLETE, detailed answer in "speak" — do not truncate or summarize, give the full response.
+3. Never use markdown symbols (**, ##, ---) or bullet points using * or - in "speak". Use plain numbered lists or plain prose instead.
+4. Be warm and personal — you know {_USER_NAME} well.
+5. If the user wants you to DO something (open, play, search, send, create), pick a skill.
+6. If it's a question, explanation, or request for help you can answer directly, use general_chat.
+7. For ambiguous requests, pick the most likely skill and proceed confidently.
+8. Never output anything outside the JSON object."""
 
 
 def _trim_history(history: list[dict], max_chars: int = 6000) -> list[dict]:
@@ -140,7 +141,7 @@ def ask(query: str, speak_callback=None) -> dict:
             model=_MODEL,
             messages=messages,
             temperature=0.6,
-            max_tokens=512,
+            max_tokens=1500,
         )
         raw = response.choices[0].message.content.strip()
         log.debug(f"Brain raw response: {raw}")
