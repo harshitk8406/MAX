@@ -318,30 +318,43 @@ def _wake_loop(on_wake_callback):
     """Background loop that listens for the wake word."""
     log.info(f"Wake-word listener started. Listening for: '{_WAKE_WORD}'")
     recognizer = sr.Recognizer()
-    recognizer.pause_threshold = 0.8
-    recognizer.energy_threshold = 200        # Sensitive — no shouting needed
+    recognizer.energy_threshold = 300
     recognizer.dynamic_energy_threshold = True
-    recognizer.dynamic_energy_adjustment_damping = 0.15
-    recognizer.dynamic_energy_ratio = 1.5
+    recognizer.pause_threshold = 0.6
 
-    while _wake_active.is_set():
-        try:
-            with sr.Microphone() as source:
-                recognizer.adjust_for_ambient_noise(source, duration=0.5)
-                audio = recognizer.listen(source, timeout=3, phrase_time_limit=5)
-            text = recognizer.recognize_google(audio, language='en-in').lower()
-            log.debug(f"Wake listener heard: {text}")
-            # Use word-boundary check so "max" in e.g. "maximize" doesn't trigger
-            words = text.split()
-            if _WAKE_WORD in words or _WAKE_WORD in text:
-                log.info("Wake word detected!")
-                on_wake_callback()
-        except (sr.WaitTimeoutError, sr.UnknownValueError):
-            pass
-        except sr.RequestError as e:
-            log.warning(f"Wake-word STT error: {e}")
-        except Exception as e:
-            log.error(f"Wake-word loop error: {e}")
+    # Common STT mishearings of "max" — broaden matching so a short single
+    # word is reliably caught even with imperfect transcription
+    _WAKE_ALIASES = {_WAKE_WORD, "macs", "mex", "mac", "marks", "max.",
+                     "backs", "packs", "lacks", "tax", "wax", "fax"}
+
+    with sr.Microphone() as source:
+        # Calibrate once at startup, not on every loop iteration
+        log.debug("Wake listener: calibrating microphone...")
+        recognizer.adjust_for_ambient_noise(source, duration=1.5)
+        log.debug(f"Wake listener: energy threshold = {recognizer.energy_threshold:.0f}")
+
+        while _wake_active.is_set():
+            try:
+                # phrase_time_limit: 3s is plenty for a single wake word;
+                # shorter = faster feedback, less chance of timeout
+                audio = recognizer.listen(source, timeout=5, phrase_time_limit=3)
+                text = recognizer.recognize_google(audio, language='en-in').lower().strip()
+                log.debug(f"Wake listener heard: '{text}'")
+
+                # Match on any word in the phrase or any known alias
+                words = set(text.replace('.', '').replace(',', '').split())
+                if words & _WAKE_ALIASES or _WAKE_WORD in text:
+                    log.info(f"Wake word detected in: '{text}'")
+                    on_wake_callback()
+
+            except sr.WaitTimeoutError:
+                pass   # silence — keep listening
+            except sr.UnknownValueError:
+                pass   # couldn't understand — keep listening
+            except sr.RequestError as e:
+                log.warning(f"Wake-word STT error: {e}")
+            except Exception as e:
+                log.error(f"Wake-word loop error: {e}")
 
 
 def start_wake_listener(on_wake_callback):
